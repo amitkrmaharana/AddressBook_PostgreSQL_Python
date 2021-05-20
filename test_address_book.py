@@ -4,11 +4,14 @@ from Addressbook import AddressBook
 class TestAddressBook:
     address_book = AddressBook()
 
-    def test_create_database(self):
+    def test_create_table(self):
         """
 
-        :return: to check if database is created or not
+        :return:
         """
-        db_name = "trydb3"
-        result = self.address_book.create_database(db_name)
-        assert result == True, "Database not created"
+        table_name = "students"
+        field1 = "name"
+        field2 = "city"
+        field3 = "state"
+        result = self.address_book.create_table(table_name, field1, field2, field3)
+        assert result == True, "Table not created"

@@ -8,7 +8,7 @@ class AddressBook:
     def __init__(self):
         # establishing the connection
         self.client = psycopg2.connect(
-            database="postgres",
+            database="address_book",
             user='postgres',
             password='robowars@1amit',
             host='127.0.0.1',
@@ -18,20 +18,28 @@ class AddressBook:
         # Creating a cursor object using the cursor() method
         self.mycursor = self.client.cursor()
 
-    def create_database(self, db_name):
+    def create_table(self, table_name, field1, field2, field3):
         """
 
-        :param db_name: name of the database to be created
-        :return: return True if database is created
+        :param table_name: table name to be created
+        :param field1: 1st field name in table
+        :param field2: 2nd field name
+        :param field3: 3rd field name
+        :return: true if table is created
         """
         try:
-            database_list = []
-            sql = "CREATE DATABASE {}".format(str(db_name))
+            table_list = []
+            # Create table
+            sql = "CREATE TABLE {}({} CHAR(60), {} CHAR(60), {} CHAR(60))".format(str(table_name), str(field1),
+                                                                                  str(field2),
+                                                                                  str(field3))
             self.mycursor.execute(sql)
-            self.mycursor.execute("SELECT datname FROM pg_database")
-            database_tuple = self.mycursor.fetchall()
-            for values in database_tuple:
-                database_list.append(values[0])
-            return db_name in database_list
+            # Fetching table_schema
+            self.mycursor.execute(
+                "SELECT * FROM information_schema.tables WHERE table_type='BASE TABLE' AND table_schema='public'")
+            schema_list = self.mycursor.fetchall()
+            for values in schema_list:
+                table_list.append(values[2])  # retrieving table names
+            return table_name in table_list
         except Exception as e:
             logger.exception(e)

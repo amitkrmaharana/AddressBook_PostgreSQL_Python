@@ -43,3 +43,27 @@ class AddressBook:
             return table_name in table_list
         except Exception as e:
             logger.exception(e)
+
+    def insert_table(self, table_name, field1, field2, field3, contact1, contact2, contact3):
+        """
+
+        :param contact1: data1 to be inserted
+        :param contact2:data2 to be inserted
+        :param contact3:data3 to be inserted
+        :param table_name: name of the table
+        :param field1: 1st field
+        :param field2: 2nd field
+        :param field3: 3rd field
+        :return: number of rows affected
+        """
+        try:
+            # insert data
+            sql = "INSERT INTO {} ({}, {}, {}) VALUES {}, {}, {}" \
+                .format(str(table_name), str(field1),
+                        str(field2), str(field3), tuple(contact1),
+                        tuple(contact2), tuple(contact3))
+            self.mycursor.execute(sql)
+            self.client.commit()
+            return self.mycursor.rowcount # count rows inserted
+        except Exception as e:
+            logger.exception(e)

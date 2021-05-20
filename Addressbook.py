@@ -64,6 +64,28 @@ class AddressBook:
                         tuple(contact2), tuple(contact3))
             self.mycursor.execute(sql)
             self.client.commit()
-            return self.mycursor.rowcount # count rows inserted
+            return self.mycursor.rowcount  # count rows inserted
+        except Exception as e:
+            logger.exception(e)
+
+    def update_data(self, table_name, reference_field, reference_field_value, field_to_be_changed,
+                    field_to_be_changed_value):
+        """
+
+        :param table_name: name of the table to be updated
+        :param reference_field: field by which the row is to be referenced
+        :param reference_field_value: value of the referenced field
+        :param field_to_be_changed: field to be updated
+        :param field_to_be_changed_value: value of the field to be updated
+        :return: number of rows updated
+        """
+        try:
+            # update data
+            sql = "UPDATE {} SET {} = '{}' WHERE {} = '{}'".format(str(table_name), str(field_to_be_changed),
+                                                                   str(field_to_be_changed_value),
+                                                                   str(reference_field), str(reference_field_value))
+            self.mycursor.execute(sql)
+            self.client.commit()
+            return self.mycursor.rowcount  # rows affected
         except Exception as e:
             logger.exception(e)
